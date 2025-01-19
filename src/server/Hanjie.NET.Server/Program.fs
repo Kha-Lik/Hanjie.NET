@@ -5,6 +5,7 @@ open System.IO
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Cors.Infrastructure
 open Microsoft.AspNetCore.Hosting
+open Microsoft.AspNetCore.Http
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
@@ -51,10 +52,18 @@ module Views =
 // ---------------------------------
 
 let indexHandler (name : string) =
-    let greetings = sprintf "Hello %s, from Giraffe!" name
+    let greetings = $"Hello %s{name}, from Giraffe!"
     let model     = { Text = greetings }
     let view      = Views.index model
     htmlView view
+    
+let greetHandler  =
+    fun (next : HttpFunc) (ctx : HttpContext) ->
+        let name = ctx.TryGetQueryStringValue "name"
+                   |> Option.defaultValue "world"
+        let greetings = $"Hello {name}, from Giraffe!"
+        ctx.WriteJsonAsync greetings
+        
 
 let webApp =
     choose [
@@ -62,6 +71,7 @@ let webApp =
             choose [
                 route "/" >=> indexHandler "world"
                 routef "/hello/%s" indexHandler
+                route "/api/hello" >=> greetHandler
             ]
         setStatusCode 404 >=> text "Not Found" ]
 
@@ -99,8 +109,10 @@ let configureApp (app : IApplicationBuilder) =
         .UseGiraffe(webApp)
 
 let configureServices (services : IServiceCollection) =
-    services.AddCors()    |> ignore
-    services.AddGiraffe() |> ignore
+    services
+        .AddCors()
+        .AddGiraffe()
+    |> ignore
 
 let configureLogging (builder : ILoggingBuilder) =
     builder.AddConsole()
