@@ -1,2 +1,3 @@
 src/server/Hanjie.NET.Server/obj/*
+src/server/Hanjie.NET.Server/bin/*
 src/client/node_modules/*
