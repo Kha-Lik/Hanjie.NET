@@ -1,5 +1,6 @@
 module Server
 
+open Giraffe
 open SAFE
 open Saturn
 open Shared
@@ -30,10 +31,20 @@ let todosApi ctx = {
         }
 }
 
-let webApp = Api.make todosApi
+let greetingsApi ctx = {
+    getGreeting = fun () -> async { return "Hello from Saturn!" }
+    getGreetingWithName =
+        fun name -> async { return sprintf "Hello %s from Saturn!" name }
+}
+
+let todoApiHandler = Api.make todosApi
+let greetingApiHandler = Api.make greetingsApi
 
 let app = application {
-    use_router webApp
+    use_router (choose [
+         todoApiHandler
+         greetingApiHandler
+    ])
     memory_cache
     use_static "public"
     use_gzip

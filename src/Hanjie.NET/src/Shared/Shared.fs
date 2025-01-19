@@ -17,3 +17,8 @@ type ITodosApi = {
     getTodos: unit -> Async<Todo list>
     addTodo: Todo -> Async<Todo list>
 }
+
+type IGreetingApi = {
+    getGreeting: unit -> Async<string>
+    getGreetingWithName: string -> Async<string>
+}
