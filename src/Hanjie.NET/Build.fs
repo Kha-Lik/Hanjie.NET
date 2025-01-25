@@ -45,7 +45,7 @@ Target.create "Azure" (fun _ ->
     deployment |> Deploy.execute "SAFE-App" Deploy.NoParameters |> ignore)
 
 Target.create "Build" (fun _ ->
-    run dotnet [ "build"; "Application.sln" ] "."
+    run dotnet [ "build"; "Hanjie.NET.sln" ] "."
 
     )
 

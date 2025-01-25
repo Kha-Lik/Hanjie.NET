@@ -1,5 +1,6 @@
 module Client.Tests
 
+open Client.IndexModules.Todo
 open Fable.Mocha
 
 open Index
@@ -12,15 +13,15 @@ let client =
         <| fun _ ->
             let newTodo = Todo.create "new todo"
             let model, _ = init ()
-            let model, _ = update (SaveTodo(Finished [ newTodo ])) model
+            let model, _ = update (Todo (SaveTodo(Finished [ newTodo ]))) model
 
             Expect.equal
-                (model.Todos |> RemoteData.map _.Length |> RemoteData.defaultValue 0)
+                (model.TodoModel.Todos |> RemoteData.map _.Length |> RemoteData.defaultValue 0)
                 1
                 "There should be 1 todo"
 
             Expect.equal
-                (model.Todos
+                (model.TodoModel.Todos
                  |> RemoteData.map List.head
                  |> RemoteData.defaultValue (Todo.create ""))
                 newTodo
