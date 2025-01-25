@@ -2,7 +2,7 @@ module Client.Modules.Index
 
 open Client.Modules.IndexModules
 open Elmish
-open SAFE
+open Feliz.Router
 
 type Model = {
     TodoModel: TodoList.Model
