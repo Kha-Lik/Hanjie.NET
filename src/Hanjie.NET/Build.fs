@@ -51,7 +51,7 @@ Target.create "Build" (fun _ ->
 
 Target.create "Run" (fun _ ->
     [
-        "server", dotnet [ "watch"; "run"; "--no-restore" ] serverPath
+        "server", dotnet [ "watch"; "run"; "--no-restore"; "--no-hot-reload" ] serverPath
         "client", dotnet [ "fable"; "watch"; "-o"; "output"; "-s"; "--run"; "npx"; "vite" ] clientPath
     ]
     |> runParallel)
@@ -64,7 +64,7 @@ Target.create "RunTestsHeadless" (fun _ ->
 
 Target.create "WatchRunTests" (fun _ ->
     [
-        "server", dotnet [ "watch"; "run"; "--no-restore" ] serverTestsPath
+        "server", dotnet [ "watch"; "run"; "--no-restore"; "--no-hot-reload" ] serverTestsPath
         "client", dotnet [ "fable"; "watch"; "-o"; "output"; "-s"; "--run"; "npx"; "vite" ] clientTestsPath
     ]
     |> runParallel)
