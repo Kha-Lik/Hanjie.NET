@@ -3,6 +3,7 @@ module Server
 open Giraffe
 open SAFE
 open Saturn
+open ImageApi
 open Shared
 
 module Storage =
@@ -34,16 +35,18 @@ let todosApi ctx = {
 let greetingsApi ctx = {
     getGreeting = fun () -> async { return "Hello from Saturn!" }
     getGreetingWithName =
-        fun name -> async { return sprintf "Hello %s from Saturn!" name }
+        fun name -> async { return $"Hello %s{name} from Saturn!" }
 }
 
 let todoApiHandler = Api.make todosApi
 let greetingApiHandler = Api.make greetingsApi
+let imageApiHandler = Api.make imageApi
 
 let app = application {
     use_router (choose [
          todoApiHandler
          greetingApiHandler
+         imageApiHandler
     ])
     memory_cache
     use_static "public"
