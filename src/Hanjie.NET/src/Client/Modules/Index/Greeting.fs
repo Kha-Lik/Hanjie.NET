@@ -1,4 +1,4 @@
-﻿module Client.Greeting
+﻿module Client.Modules.IndexModules.Greeting
 
 open System
 open Elmish
@@ -6,7 +6,7 @@ open Feliz
 open SAFE
 open Shared
 
-type GreetingModel = {
+type Model = {
     Name: string
     Greeting: RemoteData<string>
 }
@@ -18,7 +18,9 @@ type GreetingMsg =
 
 let greetingsApi = Api.makeProxy<IGreetingApi> ()
 
-let updateGreeting msg model =
+let init () = { Name = ""; Greeting = NotStarted }, Cmd.ofMsg (LoadGreeting(Start()))
+
+let update msg model =
     match msg with
     | SetName value -> { model with Name = value }, Cmd.none
     | LoadGreeting msg ->
@@ -37,7 +39,7 @@ let updateGreeting msg model =
             { model with Greeting = model.Greeting.StartLoading() }, loadGreetingWithNameCmd
         | Finished greeting -> { model with Greeting = Loaded greeting }, Cmd.none
 
-module GreetingView =
+module View =
     let greetingAction model dispatch =
         Html.div [
             prop.className "flex flex-col sm:flex-row mt-4 gap-4"

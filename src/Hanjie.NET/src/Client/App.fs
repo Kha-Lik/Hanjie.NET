@@ -1,7 +1,7 @@
 module App
 
+open Client.Modules
 open Elmish
-
 open Fable.Core.JsInterop
 
 importSideEffects "./index.css"

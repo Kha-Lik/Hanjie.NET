@@ -1,9 +1,9 @@
 module Client.Tests
 
-open Client.IndexModules.Todo
+open Client.Modules.TodoList
 open Fable.Mocha
 
-open Index
+open Client.Modules.Index
 open Shared
 open SAFE
 
@@ -13,7 +13,7 @@ let client =
         <| fun _ ->
             let newTodo = Todo.create "new todo"
             let model, _ = init ()
-            let model, _ = update (Todo (SaveTodo(Finished [ newTodo ]))) model
+            let model, _ = update (TodoMsg (SaveTodo(Finished [ newTodo ]))) model
 
             Expect.equal
                 (model.TodoModel.Todos |> RemoteData.map _.Length |> RemoteData.defaultValue 0)

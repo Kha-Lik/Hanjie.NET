@@ -1,4 +1,4 @@
-﻿module Client.Image
+﻿module Client.Modules.Image
 
 open SAFE
 open Shared

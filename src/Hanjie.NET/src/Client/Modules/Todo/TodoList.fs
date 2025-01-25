@@ -1,11 +1,11 @@
-﻿module Client.IndexModules.Todo
+﻿module Client.Modules.TodoList
 
 open Elmish
 open Feliz
 open SAFE
 open Shared
 
-type TodoModel = {
+type Model = {
     Todos: RemoteData<Todo list>
     Input: string
 }
@@ -17,7 +17,9 @@ type TodoMsg =
 
 let todosApi = Api.makeProxy<ITodosApi> ()
 
-let updateTodo msg model =
+let init () = { Todos = NotStarted; Input = "" }, Cmd.ofMsg (LoadTodos(Start()))
+
+let update msg model =
     match msg with
     | SetInput value -> { model with Input = value }, Cmd.none
     | SaveTodo msg ->
@@ -39,7 +41,7 @@ let updateTodo msg model =
             { model with Todos = model.Todos.StartLoading() }, loadTodosCmd
         | Finished todos -> { model with Todos = Loaded todos }, Cmd.none
 
-module TodoView =
+module View =
     let todoAction model dispatch =
         Html.div [
             prop.className "flex flex-col sm:flex-row mt-4 gap-4"

@@ -1,43 +1,45 @@
-module Index
+module Client.Modules.Index
 
-open Client.Greeting
-open Client.IndexModules.Todo
+open Client.Modules.IndexModules
 open Elmish
 open SAFE
 
 type Model = {
-    TodoModel: TodoModel
-    GreetingModel: GreetingModel
+    TodoModel: TodoList.Model
+    GreetingModel: Greeting.Model
 }
 
 type Msg =
-    | Todo of TodoMsg
-    | Greeting of GreetingMsg
+    | TodoMsg of TodoList.TodoMsg
+    | GreetingMsg of Greeting.GreetingMsg
 
 let init () =
-    let initialModel = { TodoModel = {Todos = NotStarted; Input = ""}; GreetingModel = { Name = ""; Greeting = NotStarted } }
+    let initTodo = TodoList.init ()
+    let initGreeting = Greeting.init ()
+    let initialModel = { TodoModel = fst initTodo; GreetingModel = fst initGreeting }
     let initialCmd = Cmd.batch [
-        Cmd.ofMsg (Todo (LoadTodos(Start())))
-        Cmd.ofMsg (Greeting (LoadGreeting(Start())))
-    ]
+        snd initTodo |> Cmd.map TodoMsg
+        snd initGreeting |> Cmd.map GreetingMsg
+        ]
 
     initialModel, initialCmd
 
+
 let update msg model =
     match msg with
-    | Todo msg ->
-        let updatedModel, cmd = updateTodo msg model.TodoModel
-        {model with TodoModel = updatedModel}, Cmd.map Todo cmd
-    | Greeting msg ->
-        let updatedModel, cmd = updateGreeting msg model.GreetingModel
-        {model with GreetingModel = updatedModel}, Cmd.map Greeting cmd
+    | TodoMsg msg ->
+        let updatedModel, cmd = TodoList.update msg model.TodoModel
+        {model with TodoModel = updatedModel}, Cmd.map TodoMsg cmd
+    | GreetingMsg msg ->
+        let updatedModel, cmd = Greeting.update msg model.GreetingModel
+        {model with GreetingModel = updatedModel}, Cmd.map GreetingMsg cmd
 
 open Feliz
 
 module ViewComponents =
-    let greeting = GreetingView.greeting
+    let greeting = Greeting.View.greeting
 
-    let todoList = TodoView.todoList
+    let todoList = TodoList.View.todoList
 
 let view model dispatch =
     Html.section [
@@ -62,8 +64,8 @@ let view model dispatch =
                         prop.className "text-center text-5xl font-bold text-white mb-3 rounded-md p-4"
                         prop.text "Hanjie.NET"
                     ]
-                    ViewComponents.todoList model.TodoModel (fun msg -> dispatch (Todo msg))
-                    ViewComponents.greeting model.GreetingModel (fun msg -> dispatch (Greeting msg))
+                    ViewComponents.todoList model.TodoModel (fun msg -> dispatch (TodoMsg msg))
+                    ViewComponents.greeting model.GreetingModel (fun msg -> dispatch (GreetingMsg msg))
                 ]
             ]
         ]

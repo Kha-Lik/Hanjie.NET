@@ -9,10 +9,10 @@
         <None Include="tailwind.config.js" />
         <None Include="index.html" />
         <None Include="paket.references" />
-        <Compile Include="IndexModules\Greeting.fs" />
-        <Compile Include="IndexModules\Todo.fs" />
-        <Compile Include="Image.fs" />
-        <Compile Include="Index.fs" />
+        <Compile Include="Modules\Image\Image.fs" />
+        <Compile Include="Modules\Todo\TodoList.fs" />
+        <Compile Include="Modules\Index\Greeting.fs" />
+        <Compile Include="Modules\Index\Index.fs" />
         <Compile Include="App.fs" />
         <None Include="vite.config.mts" />
     </ItemGroup>
