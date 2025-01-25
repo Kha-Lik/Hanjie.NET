@@ -1,6 +1,7 @@
 namespace Shared
 
 open System
+open Shared.ImageProcessing.Transformers
 
 type Todo = { Id: Guid; Description: string }
 
@@ -21,4 +22,17 @@ type ITodosApi = {
 type IGreetingApi = {
     getGreeting: unit -> Async<string>
     getGreetingWithName: string -> Async<string>
+}
+
+type ImageProcessingRequest = {
+    Transformers: TransformerDescriptor list
+    Image: string
+}
+
+type ImageProcessingResponse = {
+    ProcessedImage: string
+}
+
+type IImageApi = {
+    getProcessedImage: ImageProcessingRequest -> Async<ImageProcessingResponse>
 }

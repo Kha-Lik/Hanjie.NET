@@ -4,8 +4,12 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ImageProcessing.fs" />
     <Compile Include="Shared.fs" />
     <Content Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
